@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Abdul Ghaffar — Front-End Developer</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,13 +28,18 @@
       --white:    #ffffff;
     }
 
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden; /* Prevents horizontal stretching */
+    }
+
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       font-size: 16px;
       line-height: 1.7;
-      overflow-x: hidden;
+      position: relative;
     }
 
     /* ── NOISE OVERLAY ── */
@@ -54,7 +59,12 @@
     /* ── UTILITY ── */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
     h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
-    .section { padding: 100px 0; position: relative; z-index: 1; }
+    .section { 
+      padding: 100px 0; 
+      position: relative; 
+      z-index: 1; 
+      overflow: hidden; /* Crucial fix for mobile layout breaking */
+    }
     .section-label {
       display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em;
       text-transform: uppercase; color: var(--cyan); margin-bottom: 12px;
@@ -116,6 +126,7 @@
       background: rgba(8,12,20,0.97); backdrop-filter: blur(20px);
       z-index: 99; border-bottom: 1px solid var(--border);
       padding: 24px; flex-direction: column; gap: 20px;
+      max-height: calc(100vh - 80px); overflow-y: auto;
     }
     .mobile-menu.open { display: flex; }
     .mobile-menu a {
@@ -132,7 +143,7 @@
     /* ── HERO ── */
     #home {
       min-height: 100vh; display: flex; align-items: center;
-      padding-top: 80px; position: relative; overflow: hidden;
+      padding-top: 80px; position: relative;
     }
     .hero-blob-1 {
       width: 600px; height: 600px;
@@ -233,8 +244,7 @@
     .hero-image-ring {
       position: relative; width: 320px; height: 320px;
     }
-    @media(max-width:480px) { .hero-image-ring { width: 260px; height: 260px; } }
-
+    
     .hero-image-ring::before {
       content: '';
       position: absolute; inset: -4px; border-radius: 50%;
@@ -340,11 +350,6 @@
     .skill-icon { height: 48px; width: auto; object-fit: contain; filter: drop-shadow(0 0 6px rgba(255,255,255,0.1)); font-size: 3rem; color: var(--muted); }
     .skill-card:hover .skill-icon { color: var(--cyan); }
     .skill-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--white); }
-    .ai-badge {
-      font-size: 2rem; font-weight: 800; font-family: 'Syne', sans-serif;
-      background: linear-gradient(135deg, #818cf8, #c084fc);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
 
     /* ── PROJECTS ── */
     #projects { background: var(--surface); }
@@ -364,12 +369,7 @@
       min-height: 280px; position: relative; overflow: hidden;
     }
     .project-visual img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      inset: 0;
-      z-index: 1;
+      width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; z-index: 1;
     }
 
     .project-body { 
@@ -446,25 +446,23 @@
 
     /* ── WHATSAPP CHAT WIDGET ── */
     .wa-widget {
-      position: fixed; bottom: 28px; right: 28px; z-index: 200;
+      position: fixed; bottom: 28px; right: 28px; z-index: 9999; /* Fixed Z-index */
       display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
     }
 
     .wa-bubble-wrap {
       background: rgba(8,12,20,0.98); backdrop-filter: blur(20px);
       border: 1px solid rgba(37,211,102,0.3); border-radius: 20px;
-      padding: 20px; width: 300px;
+      padding: 20px; width: 300px; max-width: calc(100vw - 32px); /* strict boundary */
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
       transform-origin: bottom right;
       transform: scale(0.8) translateY(20px);
       opacity: 0; pointer-events: none;
       transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
-      max-height: 75vh;
-      overflow-y: auto;
+      max-height: 75vh; overflow-y: auto;
     }
     .wa-bubble-wrap.open {
-      transform: scale(1) translateY(0);
-      opacity: 1; pointer-events: all;
+      transform: scale(1) translateY(0); opacity: 1; pointer-events: all;
     }
 
     .wa-header {
@@ -517,7 +515,6 @@
     .wa-fab.open .wa-fab-open { display: none; }
     .wa-fab.open .wa-fab-close { display: block; }
 
-    /* Notification dot */
     .wa-notif {
       position: absolute; top: -2px; right: -2px;
       width: 14px; height: 14px; border-radius: 50%;
@@ -535,7 +532,6 @@
     [data-aos="zoom-in"] { opacity: 0; transform: scale(0.9); }
     [data-aos="zoom-in"].aos-animate { opacity: 1; transform: scale(1); }
 
-    /* ── ANIMATION STAGGER UTILITY ── */
     .stagger-1 { transition-delay: 0.1s !important; }
     .stagger-2 { transition-delay: 0.2s !important; }
     .stagger-3 { transition-delay: 0.3s !important; }
@@ -548,46 +544,45 @@
     /* ════════════════════════════════════════════════════ */
     
     @media (max-width: 768px) {
-      /* Padding for entire sections so they breathe */
       .section { padding: 60px 0; }
       .container { padding: 0 16px; }
       .section-title { margin-bottom: 40px; }
     }
 
     @media (max-width: 640px) {
-      /* Timeline / Education Section Fixes */
       .tl-item { gap: 14px; margin-bottom: 32px; }
-      .timeline::before { left: 19px; } /* Adjust center line for smaller dot */
+      .timeline::before { left: 19px; } 
       .tl-dot { width: 40px; height: 40px; min-width: 40px; }
       .tl-dot svg { width: 16px; height: 16px; }
-      /* Cards ki padding kam ki taake narrow screens pe patlay na hon */
       .tl-card { padding: 18px 16px; }
       .tl-title { font-size: 1.1rem; }
     }
 
     @media (max-width: 480px) {
-      /* Hero text and spacing fixes for very small phones */
       .hero-name { font-size: 2.4rem; }
       .hero-eyebrow { 
-        font-size: 0.75rem; 
-        letter-spacing: 0.15em; 
-        flex-wrap: wrap; 
-        text-align: center; 
+        font-size: 0.75rem; letter-spacing: 0.15em; flex-wrap: wrap; text-align: center; 
       }
       .role-badge { font-size: 0.75rem; padding: 4px 10px; }
       
-      /* WhatsApp Widget Mobile Size Fixes */
-      .wa-widget { bottom: 16px; right: 16px; z-index: 999; }
+      /* Image ring resized to prevent layout breaking on small phones */
+      .hero-image-ring { width: 220px; height: 220px; }
+      .hero-stat { padding: 6px 14px; }
+      .hero-stat-num { font-size: 1.15rem; }
+      .hero-stat-label { font-size: 0.65rem; }
+      .stat-1 { left: -10px; top: -10px; }
+      .stat-2 { right: -10px; bottom: 10px; }
+      
+      /* WhatsApp Widget Fixed Coordinates */
+      .wa-widget { bottom: 16px; right: 16px; z-index: 9999; }
       .wa-bubble-wrap {
-        /* Screen ki chaurai ke mutabiq 100% minus padding adjust kar diya */
-        width: calc(100vw - 32px); 
-        max-width: 340px;
+        width: 300px;
+        max-width: calc(100vw - 32px);
         padding: 16px;
       }
       .wa-fab { width: 54px; height: 54px; }
       .wa-fab svg { width: 28px; height: 28px; }
     }
-
   </style>
 </head>
 <body>
